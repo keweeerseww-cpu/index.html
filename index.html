@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Telegram Mini App</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background: #12121a; color: white; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        
+        /* Верхняя панель навигации */
+        .nav { display: flex; background: #1e1e2b; padding: 10px; gap: 5px; border-bottom: 1px solid #333; z-index: 100; }
+        .nav-btn { flex: 1; padding: 10px 5px; background: transparent; border: none; color: #888; font-weight: bold; font-size: 13px; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+        .nav-btn.active { background: #ffa502; color: #000; }
+
+        /* Контентная часть (сюда будут загружаться страницы) */
+        .content { flex: 1; position: relative; overflow: hidden; }
+        iframe { width: 100%; height: 100%; border: none; position: absolute; top: 0; left: 0; display: none; background: #12121a; }
+        iframe.active { display: block; }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <button class="nav-btn active" onclick="switchTab('roulette', this)">🎡 Рулетка</button>
+        <button class="nav-btn" onclick="switchTab('cases', this)">📦 Кейсы</button>
+        <button class="nav-btn" onclick="switchTab('profile', this)">👤 Профиль</button>
+        <button class="nav-btn" onclick="switchTab('market', this)">🛒 Рынок</button>
+    </div>
+    <div class="content">
+        <iframe id="tab-roulette" src="roulette.html" class="active"></iframe>
+        <iframe id="tab-cases" src="cases.html"></iframe>
+        <iframe id="tab-profile" src="profile.html"></iframe>
+        <iframe id="tab-market" src="market.html"></iframe>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        function switchTab(tabId, btn) {
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.querySelectorAll('iframe').forEach(f => f.classList.remove('active'));
+            document.getElementById('tab-' + tabId).classList.add('active');
+        }
+    </script>
+</body>
+</html>
